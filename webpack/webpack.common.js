@@ -4,6 +4,7 @@ const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+// const path = require('path');
 const commonPaths = require('./paths');
 
 module.exports = {
@@ -40,6 +41,32 @@ module.exports = {
         ],
       },
     ],
+    // loaders: [
+    //   {
+    //       test: /\.js$/,
+    //       loaders: ["babel"],
+    //       include: path.join(__dirname, "src")
+    //   },
+    //   {
+    //       // expose immutable globally so we can use it in app.html
+    //       test: require.resolve("immutable"),
+    //       loader: "expose?immutable"
+    //   },
+    //   {
+    //       test: /\.less$/,
+    //       loader: MiniCssExtractPlugin.extract("css?sourceMap!less?sourceMap")
+    //   },
+    //   {
+    //       // move font files found within CSS to the build directory
+    //       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    //       loader: "file?name=[path][name].[ext]?[hash]&context=./node_modules"
+    //   },
+    //   {
+    //       // move images found within CSS to the build directory
+    //       test: /\.(jpg|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    //       loader: "file?name=[path][name].[ext]?[hash]&context=./node_modules"
+    //   }
+    // ]
   },
   serve: {
     add: app => {
@@ -63,6 +90,6 @@ module.exports = {
     }),
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'async',
-    }),
+    })
   ],
 };

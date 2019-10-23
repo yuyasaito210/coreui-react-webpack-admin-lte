@@ -1,7 +1,5 @@
 const webpack = require('webpack');
-const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const commonPaths = require('./paths');
 
 module.exports = {
@@ -9,10 +7,23 @@ module.exports = {
   output: {
     filename: `${commonPaths.jsFolder}/[name].js`,
     path: commonPaths.outputPath,
-    publicPath: commonPaths.outputPath,
+    publicPath: commonPaths.publicPath
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: `${commonPaths.cssFileName}`,
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
   },
   module: {
     rules: [
+      // JS | JSX
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -23,84 +34,55 @@ module.exports = {
       // CSS
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
-      // SASS support - compile all .global.scss files and pipe it to style.css
+      // SCSS
       {
-        test: /\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader'
-          }
-        ]
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
-      // // WOFF Font
+      // // CSS
       // {
-      //   test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'application/font-woff'
-      //     }
-      //   }
+      //   test: /\.css$/,
+      //   use: [
+      //     {
+      //       loader: 'style-loader'
+      //     },
+      //     {
+      //       loader: 'css-loader',
+      //       options: {
+      //         sourceMap: true
+      //       }
+      //     },
+      //     // {
+      //     //   loader: MiniCssExtractPlugin.loader,
+      //     //   options: {
+      //     //     publicPath: commonPaths.cssFolder,
+      //     //     hmr: true,
+      //     //   },
+      //     // },
+      //   ]
       // },
-      // // WOFF2 Font
+      // // SASS support - compile all .scss files and pipe it to style.css
       // {
-      //   test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'application/font-woff'
+      //   test: /\.(scss|sass)$/,
+      //   use: [
+      //     {
+      //       loader: 'style-loader'
+      //     },
+      //     {
+      //       loader: 'css-loader',
+      //       options: {
+      //         sourceMap: true,
+      //         // modules: true,
+      //         // importLoaders: 1,
+      //         // localIdentName: '[name]__[local]__[hash:base64:5]'
+      //       }
+      //     },
+      //     {
+      //       loader: 'sass-loader'
       //     }
-      //   }
-      // },
-      // // TTF Font
-      // {
-      //   test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'application/octet-stream'
-      //     }
-      //   }
-      // },
-      // // OTF Font
-      // {
-      //   test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'application/octet-stream'
-      //     }
-      //   }
-      // },
-      // // EOT Font
-      // {
-      //   test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: 'file-loader'
+      //   ]
       // },
       // SVG Font
       {
@@ -126,16 +108,6 @@ module.exports = {
           }
         ]
       }
-      // // JSON
-      // {
-      //   test: /\.(json)$/,
-      //   use: [
-      //     {
-      //       loader: 'file-loader',
-      //       options: {}
-      //     }
-      //   ]
-      // },
     ],
   },
   devServer: {
@@ -145,10 +117,16 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // new HtmlWebpackPlugin({
-    //   template: path.join(__dirname, '/../src/template.html'),
-    //   // filename: path.join(__dirname, '/../build/index.html'),
-    //   title: 'Development'
-    // })
+    // new MiniCssExtractPlugin({
+    //   // Options similar to the same options in webpackOptions.output
+    //   // all options are optional
+    //   filename: '[name].[hash].css', //'stylesheets.css'
+    //   // chunkFilename: '[id].[hash].css',
+    //   ignoreOrder: false, // Enable to remove warnings about conflicting order
+    // }),
+    new MiniCssExtractPlugin({
+      // filename: '[name].css',
+      filename: `${commonPaths.cssFolder}/[name].css`
+    }),
   ],
 };

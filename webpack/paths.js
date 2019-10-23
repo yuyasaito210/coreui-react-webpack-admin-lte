@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
   root: path.resolve(__dirname, '../'),
-  outputPath: path.resolve(__dirname, '../', 'build'),
+  outputPath: path.resolve(__dirname, '../', 'build/'),
+  publicPath: '/static/',
   entryPath: path.resolve(__dirname, '../', 'src/index.js'),
   templatePath: path.resolve(__dirname, '../', 'src/template.html'),
   indexFilePath: path.resolve(__dirname, '../', 'build/index.html'),
@@ -10,5 +11,5 @@ module.exports = {
   fontsFolder: 'fonts',
   cssFolder: 'css',
   jsFolder: 'js',
-  jsFileName: 'bundle.js'
+  cssFileName: 'stylesheets'
 };
